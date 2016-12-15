@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="WMAvatarView">
+        <attr name="wm_av_status_visible"       format="boolean" />
+        <attr name="wm_av_status_as_color"      format="boolean" />
+        <attr name="wm_av_status_offline_color" format="color" />
+        <attr name="wm_av_status_online_color"  format="color" />
+        <attr name="wm_av_status_away_color"    format="color" />
+        <attr name="wm_av_status_busy_color"    format="color" />
+    </declare-styleable>
+
+</resources>

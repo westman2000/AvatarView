@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="av_default_bitmap_background_color">#FF4081</color>
+
+    <color name="offline">#64dd17</color>
+    <color name="online">#030bff</color>
+    <color name="away">#9affeb3b</color>
+    <color name="busy">#c300ff</color>
+</resources>
