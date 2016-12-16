@@ -7,8 +7,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- *
- *
+ * Status constants
  */
 @Documented
 @IntDef({
