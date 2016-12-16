@@ -6,8 +6,9 @@
 
     <color name="av_default_bitmap_background_color">#FF4081</color>
 
-    <color name="offline">#64dd17</color>
-    <color name="online">#030bff</color>
-    <color name="away">#9affeb3b</color>
-    <color name="busy">#c300ff</color>
+    <color name="offline">#4CAF50</color>
+    <color name="online">#4CAF50</color>
+    <color name="away">#FFC107</color>
+    <color name="busy">#F44336</color>
+
 </resources>

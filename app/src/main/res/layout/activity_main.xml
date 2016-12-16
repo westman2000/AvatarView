@@ -20,49 +20,109 @@
             android:layout_height="32dp"
             android:layout_centerInParent="true"
             android:src="@drawable/default_avatar"
+            app:wm_av_status_busy_color="@color/busy"
             app:wm_av_status_as_color="false"
             app:wm_av_status_visible="true" />
 
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar">
 
-        <Button
-            android:id="@+id/btnOffline"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="offline"/>
+            >
 
-        <Button
-            android:id="@+id/btnOnline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="online"/>
+            <Button
+                android:id="@+id/btnOffline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="offline"/>
 
-        <Button
-            android:id="@+id/btnAway"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="away"/>
+            <Button
+                android:id="@+id/btnOnline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="online"/>
 
-        <Button
-            android:id="@+id/btnBusy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="busy"/>
+            <Button
+                android:id="@+id/btnAway"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="away"/>
+
+            <Button
+                android:id="@+id/btnBusy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="busy"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btnSetEmpty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="set ''"/>
+
+            <Button
+                android:id="@+id/btnSetNull"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="set NULL"/>
+
+            <Button
+                android:id="@+id/btnWWW"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="set WWW"/>
+
+            <Button
+                android:id="@+id/btnA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="set A"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btnSetImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="set img "/>
+
+            <Button
+                android:id="@+id/btnClearImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="clear img"/>
+
+        </LinearLayout>
 
     </LinearLayout>
+
+
 
     <corp.wmsoft.android.lib.wmavatarview.WMAvatarView
         android:id="@+id/toxAvatar"
         android:layout_width="196dp"
         android:layout_height="196dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/default_avatar"
         app:wm_av_status_as_color="false"
         app:wm_av_status_offline_color="@color/offline"
         app:wm_av_status_online_color="@color/online"
@@ -79,7 +139,6 @@
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
         android:src="@drawable/default_avatar"
-        app:wm_av_status_as_color="false"
         app:wm_av_status_visible="true" />
 
 </RelativeLayout>

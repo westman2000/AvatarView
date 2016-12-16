@@ -12,6 +12,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -20,7 +21,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -33,6 +36,8 @@ public class WMAvatarView extends ImageView {
     /**/
     @SuppressWarnings("unused")
     private static final String TAG = "WMAvatarView";
+
+    public static ColorGenerator colorGenerator = ColorGenerator.MATERIAL;
 
     /**/
     private static final ScaleType SCALE_TYPE           = ScaleType.CENTER_CROP;
@@ -82,11 +87,13 @@ public class WMAvatarView extends ImageView {
     private Bitmap       mStatusBitmapBusy;
 
     /**
-     *
+     * Text variables
      */
-    private boolean isTextAvatar = true;
-    private final Paint textBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private String       mText = "";
+    @ColorInt
+    private int          mTextBackgroundColor   = Color.BLACK;
+    private final Paint  textBackgroundPaint    = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint  textPaint              = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     /**
      * состояния вью: офлайн, оналайн, away, busy
@@ -126,6 +133,7 @@ public class WMAvatarView extends ImageView {
         Parcelable superState = super.onSaveInstanceState();
         SavedState ss = new SavedState(superState);
         ss.status = mStatus;
+        ss.text = mText;
         return ss;
     }
 
@@ -134,6 +142,7 @@ public class WMAvatarView extends ImageView {
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
         setStatus(ss.status);
+        setText(ss.text);
     }
 
     @Override
@@ -175,13 +184,15 @@ public class WMAvatarView extends ImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (mBitmap == null) {
-            return;
-        }
 
-        if (isTextAvatar) {
-            canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mStatusBitmapPaint);
-            canvas.drawText("WW", mDrawableRect.centerX(), mDrawableRect.centerY() - ((textPaint.descent() + textPaint.ascent()) / 2), textPaint);
+        if (mBitmap == null) {
+            // draw background
+
+            canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, textBackgroundPaint);
+
+            // draw text
+            textPaint.setTextSize(Math.min(mDrawableRect.width(), mDrawableRect.height()) / 2);
+            canvas.drawText(mText, mDrawableRect.centerX(), mDrawableRect.centerY() - ((textPaint.descent() + textPaint.ascent()) / 2), textPaint);
         } else {
             canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mBitmapPaint);
         }
@@ -238,6 +249,19 @@ public class WMAvatarView extends ImageView {
         initializeBitmap();
     }
 
+    public void setText(String newText) {
+        if (!TextUtils.isEmpty(newText)) {
+            this.mText = newText.substring(0, 1).toUpperCase();
+        } else {
+            this.mText = "";
+        }
+
+        mTextBackgroundColor = colorGenerator.getColor(mText);
+        textBackgroundPaint.setColor(mTextBackgroundColor);
+
+        invalidate();
+    }
+
     public void setStatus(@IWMAvatarStatus int status) {
         this.mStatus = status;
 
@@ -271,11 +295,6 @@ public class WMAvatarView extends ImageView {
         invalidate();
     }
 
-    @IWMAvatarStatus
-    public int getStatus() {
-        return mStatus;
-    }
-
     private void init() {
         super.setScaleType(SCALE_TYPE);
 
@@ -293,20 +312,19 @@ public class WMAvatarView extends ImageView {
     }
 
     private void setup() {
+        Log.d(TAG, "setup[" + getWidth() + ", " + getHeight() + "] mBitmap = "+mBitmap);
+
         if (getWidth() == 0 && getHeight() == 0) {
             return;
         }
 
-        if (mBitmap == null) {
-            invalidate();
-            return;
+        if (mBitmap != null) {
+            mBitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+            mBitmapPaint.setAntiAlias(true);
+            mBitmapPaint.setShader(mBitmapShader);
+            mBitmapHeight = mBitmap.getHeight();
+            mBitmapWidth = mBitmap.getWidth();
         }
-
-        mBitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-        mBitmapPaint.setAntiAlias(true);
-        mBitmapPaint.setShader(mBitmapShader);
-        mBitmapHeight = mBitmap.getHeight();
-        mBitmapWidth = mBitmap.getWidth();
 
         mDrawableRect.set(calculateBounds());
         mDrawableRadius = Math.min(mDrawableRect.height() / 2.0f, mDrawableRect.width() / 2.0f);
@@ -321,12 +339,16 @@ public class WMAvatarView extends ImageView {
         loadDrawables();
 
         // text paint settings
+        textBackgroundPaint.setColor(mTextBackgroundColor);
+        textPaint.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
         textPaint.setColor(Color.WHITE);
         textPaint.setFakeBoldText(true);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setTextAlign(Paint.Align.CENTER);
 
-        updateShaderMatrix();
+        if (mBitmap != null)
+            updateShaderMatrix();
+
         invalidate();
     }
 
@@ -342,6 +364,9 @@ public class WMAvatarView extends ImageView {
     }
 
     private void initializeBitmap() {
+
+        Log.d(TAG, "initializeBitmap(" + getDrawable() + ")");
+
         mBitmap = getBitmapFromDrawable(getDrawable(), false);
         setup();
     }
@@ -417,6 +442,8 @@ public class WMAvatarView extends ImageView {
         @IWMAvatarStatus
         int status;
 
+        String text;
+
         SavedState(Parcelable superState) {
             super(superState);
         }
@@ -425,12 +452,14 @@ public class WMAvatarView extends ImageView {
             super(in);
             //noinspection WrongConstant
             status = in.readInt();
+            text = in.readString();
         }
 
         @Override
         public void writeToParcel(Parcel out, int flags) {
             super.writeToParcel(out, flags);
             out.writeInt(status);
+            out.writeString(text);
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR

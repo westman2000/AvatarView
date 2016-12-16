@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import corp.wmsoft.android.lib.wmavatarview.AndroidHelper;
 import corp.wmsoft.android.lib.wmavatarview.IWMAvatarStatus;
 import corp.wmsoft.android.lib.wmavatarview.WMAvatarView;
 
@@ -55,5 +56,61 @@ public class MainActivity extends AppCompatActivity {
                 toxAvatarMedium.setStatus(IWMAvatarStatus.BUSY);
             }
         });
+
+        /**
+         *
+         */
+        findViewById(R.id.btnSetEmpty).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toxAvatarView.setText("");
+                toolbarAvatar.setText("");
+                toxAvatarMedium.setText("");
+            }
+        });
+        findViewById(R.id.btnSetNull).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toxAvatarView.setText(null);
+                toolbarAvatar.setText(null);
+                toxAvatarMedium.setText(null);
+            }
+        });
+        findViewById(R.id.btnWWW).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toxAvatarView.setText("WWW");
+                toolbarAvatar.setText("WWW");
+                toxAvatarMedium.setText("WWW");
+            }
+        });
+        findViewById(R.id.btnA).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toxAvatarView.setText("a");
+                toolbarAvatar.setText("a");
+                toxAvatarMedium.setText("a");
+            }
+        });
+
+        /**
+         *
+         */
+        findViewById(R.id.btnSetImg).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toxAvatarView.setImageDrawable(AndroidHelper.getVectorDrawable(MainActivity.this, R.drawable.ic_android_black_24dp));
+                toxAvatarMedium.setImageResource(R.drawable.default_avatar);
+            }
+        });
+
+        findViewById(R.id.btnClearImg).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toxAvatarView.setImageDrawable(null);
+                toxAvatarMedium.setImageDrawable(null);
+            }
+        });
+
     }
 }
