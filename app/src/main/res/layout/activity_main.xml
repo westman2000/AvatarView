@@ -101,16 +101,22 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/btnSetImg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="set img "/>
-
-            <Button
                 android:id="@+id/btnClearImg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="clear img"/>
+
+            <Button
+                android:id="@+id/btnSetResImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="set res img "/>
+
+            <Button
+                android:id="@+id/btnSetExtImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="set ext img "/>
 
         </LinearLayout>
 

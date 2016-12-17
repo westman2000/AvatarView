@@ -1,8 +1,12 @@
 package com.example.admin.myapplication;
 
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import java.io.File;
 
 import corp.wmsoft.android.lib.wmavatarview.AndroidHelper;
 import corp.wmsoft.android.lib.wmavatarview.IWMAvatarStatus;
@@ -96,11 +100,19 @@ public class MainActivity extends AppCompatActivity {
         /**
          *
          */
-        findViewById(R.id.btnSetImg).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btnSetResImg).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 toxAvatarView.setImageDrawable(AndroidHelper.getVectorDrawable(MainActivity.this, R.drawable.ic_android_black_24dp));
                 toxAvatarMedium.setImageResource(R.drawable.default_avatar);
+            }
+        });
+
+        findViewById(R.id.btnSetExtImg).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toxAvatarView.setImageBitmap(BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + File.separator + "1.png"));
+                toxAvatarMedium.setImageBitmap(BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + File.separator + "2.png"));
             }
         });
 

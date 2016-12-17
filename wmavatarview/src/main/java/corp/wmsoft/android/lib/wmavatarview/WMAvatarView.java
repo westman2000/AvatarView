@@ -23,7 +23,6 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -166,6 +165,17 @@ public class WMAvatarView extends ImageView {
     @Override
     public ScaleType getScaleType() {
         return SCALE_TYPE;
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+
+        int size = Math.min(heightSize, widthSize);
+
+        //MUST CALL THIS
+        setMeasuredDimension(size, size);
     }
 
     @Override
@@ -312,7 +322,6 @@ public class WMAvatarView extends ImageView {
     }
 
     private void setup() {
-        Log.d(TAG, "setup[" + getWidth() + ", " + getHeight() + "] mBitmap = "+mBitmap);
 
         if (getWidth() == 0 && getHeight() == 0) {
             return;
@@ -364,9 +373,6 @@ public class WMAvatarView extends ImageView {
     }
 
     private void initializeBitmap() {
-
-        Log.d(TAG, "initializeBitmap(" + getDrawable() + ")");
-
         mBitmap = getBitmapFromDrawable(getDrawable(), false);
         setup();
     }
