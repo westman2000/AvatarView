@@ -1,0 +1,12 @@
+ext {
+    compileSdkVer = 25
+    buildToolsVer = "25.0.1"
+
+    minSdkVer    = 14
+    targetSdkVer = 25
+
+    verCode = 1
+    verName = "0.0.1"
+
+    supportLibVer    = "25.1.0"
+}

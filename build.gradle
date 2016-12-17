@@ -18,22 +18,10 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+subprojects {
+    apply from: '../dependencies.gradle'
 }
 
-// Define versions in a single place
-ext {
-    // Sdk and tools
-    minSdkVersion           = 14
-    targetSdkVersion        = 25
-    compileSdkVersion       = 25
-    buildToolsVersion       = '25.0.1'
-
-    // App dependencies
-    supportLibraryVersion   = '25.1.0'
-
-    // Details
-    baseAndroidVersionName  = 'Ver 0.0.1'
-    baseAndroidVersionCode  = 1
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
