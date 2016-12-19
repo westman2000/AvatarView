@@ -23,8 +23,11 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
+import java.io.Serializable;
 
 
 /**
@@ -34,7 +37,7 @@ public class WMAvatarView extends ImageView {
 
     /**/
     @SuppressWarnings("unused")
-    private static final String TAG = "WMAvatarView";
+    private static final String TAG = "wm::WMAvatarView";
 
     public static ColorGenerator colorGenerator = ColorGenerator.MATERIAL;
 
@@ -64,7 +67,7 @@ public class WMAvatarView extends ImageView {
      */
     private int          mStatusCircleRadius    = STATUS_ICON_MAX_RADIUS; // радиус внешнего круга
     private int          mStatusIconRadius      = STATUS_ICON_MAX_RADIUS; // радиус кружка статуса
-    private final Paint  mStatusCirclePaint     = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private static final Paint  mStatusCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private boolean      isStatusVisible        = true;
     private boolean      useColorsAsStatusIcon  = true;
     private int          statusIconX;
@@ -79,11 +82,10 @@ public class WMAvatarView extends ImageView {
     @ColorInt
     private int          mStatusColorBusy       = Color.RED;
     // картинки для статуса
-    private final Paint  mStatusBitmapPaint     = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Bitmap       mStatusBitmapOffline;
-    private Bitmap       mStatusBitmapOnline;
-    private Bitmap       mStatusBitmapAway;
-    private Bitmap       mStatusBitmapBusy;
+    private static Drawable mStatusDrawableOffline;
+    private static Drawable mStatusDrawableOnline;
+    private static Drawable mStatusDrawableAway;
+    private static Drawable mStatusDrawableBusy;
 
     /**
      * Text variables
@@ -103,15 +105,18 @@ public class WMAvatarView extends ImageView {
 
     public WMAvatarView(Context context) {
         super(context);
+        Log.d(TAG, "WMAvatarView(" + context + ")");
         init();
     }
 
     public WMAvatarView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
+        Log.d(TAG, "WMAvatarView(" + context + ", " + attrs + ")");
     }
 
     public WMAvatarView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        Log.d(TAG, "WMAvatarView(" + context + ", " + attrs + ", "+defStyleAttr+")");
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.WMAvatarView, defStyleAttr, 0);
 
@@ -147,6 +152,7 @@ public class WMAvatarView extends ImageView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        Log.d(TAG, "onSizeChanged()");
         setup();
     }
 
@@ -169,6 +175,7 @@ public class WMAvatarView extends ImageView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        Log.d(TAG, "onMeasure()");
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
@@ -214,19 +221,26 @@ public class WMAvatarView extends ImageView {
                 canvas.drawCircle(statusIconX, statusIconY, mStatusIconRadius, mStatusIconPaint);
             } else {
 
+                int dx = statusIconX - mStatusCircleRadius;
+                int dy = statusIconY - mStatusCircleRadius;
+
                 switch (mStatus) {
 
                     case IWMAvatarStatus.AWAY:
-                        canvas.drawBitmap(mStatusBitmapAway, statusIconX - mStatusBitmapAway.getWidth()/2, statusIconY - mStatusBitmapAway.getHeight()/2, mStatusBitmapPaint);
+                        mStatusDrawableAway.setBounds(dx, dy, dx+mStatusCircleRadius*2, dy+mStatusCircleRadius*2);
+                        mStatusDrawableAway.draw(canvas);
                         break;
                     case IWMAvatarStatus.BUSY:
-                        canvas.drawBitmap(mStatusBitmapBusy, statusIconX - mStatusBitmapBusy.getWidth()/2, statusIconY - mStatusBitmapBusy.getHeight()/2, mStatusBitmapPaint);
+                        mStatusDrawableBusy.setBounds(dx, dy, dx+mStatusCircleRadius*2, dy+mStatusCircleRadius*2);
+                        mStatusDrawableBusy.draw(canvas);
                         break;
                     case IWMAvatarStatus.OFFLINE:
-                        canvas.drawBitmap(mStatusBitmapOffline, statusIconX - mStatusBitmapOffline.getWidth()/2, statusIconY - mStatusBitmapOffline.getHeight()/2, mStatusBitmapPaint);
+                        mStatusDrawableOffline.setBounds(dx, dy, dx+mStatusCircleRadius*2, dy+mStatusCircleRadius*2);
+                        mStatusDrawableOffline.draw(canvas);
                         break;
                     case IWMAvatarStatus.ONLINE:
-                        canvas.drawBitmap(mStatusBitmapOnline, statusIconX - mStatusBitmapOnline.getWidth()/2, statusIconY - mStatusBitmapOnline.getHeight()/2, mStatusBitmapPaint);
+                        mStatusDrawableOnline.setBounds(dx, dy, dx+mStatusCircleRadius*2, dy+mStatusCircleRadius*2);
+                        mStatusDrawableOnline.draw(canvas);
                         break;
                 }
 
@@ -236,25 +250,39 @@ public class WMAvatarView extends ImageView {
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+    }
+
+    @Override
     public void setImageBitmap(Bitmap bm) {
+        Log.d(TAG, "setImageBitmap(" + bm + ")");
         super.setImageBitmap(bm);
         initializeBitmap();
     }
 
     @Override
     public void setImageDrawable(Drawable drawable) {
+        Log.d(TAG, "setImageDrawable("+drawable+")");
         super.setImageDrawable(drawable);
         initializeBitmap();
     }
 
     @Override
     public void setImageResource(@DrawableRes int resId) {
+        Log.d(TAG, "setImageResource(" + resId + ")");
         super.setImageResource(resId);
         initializeBitmap();
     }
 
     @Override
     public void setImageURI(Uri uri) {
+        Log.d(TAG, "setImageURI(" + uri + ")");
         super.setImageURI(uri);
         initializeBitmap();
     }
@@ -323,6 +351,8 @@ public class WMAvatarView extends ImageView {
 
     private void setup() {
 
+        Log.d(TAG, "setup(" + getWidth() + ", " + getHeight() + ", " + mBitmap + ")");
+
         if (getWidth() == 0 && getHeight() == 0) {
             return;
         }
@@ -348,6 +378,7 @@ public class WMAvatarView extends ImageView {
         loadDrawables();
 
         // text paint settings
+        mTextBackgroundColor = colorGenerator.getColor(mText);
         textBackgroundPaint.setColor(mTextBackgroundColor);
         textPaint.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
         textPaint.setColor(Color.WHITE);
@@ -366,18 +397,23 @@ public class WMAvatarView extends ImageView {
         if (useColorsAsStatusIcon)
             return;
 
-        mStatusBitmapOffline = getBitmapFromDrawable(AndroidHelper.getVectorDrawableAntTint(getContext(), R.drawable.wm_av_status_icon_offline, mStatusColorOffline), true);
-        mStatusBitmapOnline = getBitmapFromDrawable(AndroidHelper.getVectorDrawableAntTint(getContext(), R.drawable.wm_av_status_icon_online, mStatusColorOnline), true);
-        mStatusBitmapAway = getBitmapFromDrawable(AndroidHelper.getVectorDrawableAntTint(getContext(), R.drawable.wm_av_status_icon_away, mStatusColorAway), true);
-        mStatusBitmapBusy = getBitmapFromDrawable(AndroidHelper.getVectorDrawableAntTint(getContext(), R.drawable.wm_av_status_icon_busy, mStatusColorBusy), true);
+        if (mStatusDrawableOffline == null)
+            mStatusDrawableOffline = AndroidHelper.getVectorDrawableAntTint(getContext(), R.drawable.wm_av_status_icon_offline, mStatusColorOffline);
+        if (mStatusDrawableOnline == null)
+            mStatusDrawableOnline = AndroidHelper.getVectorDrawableAntTint(getContext(), R.drawable.wm_av_status_icon_online, mStatusColorOnline);
+        if (mStatusDrawableAway == null)
+            mStatusDrawableAway = AndroidHelper.getVectorDrawableAntTint(getContext(), R.drawable.wm_av_status_icon_away, mStatusColorAway);
+        if (mStatusDrawableBusy == null)
+            mStatusDrawableBusy = AndroidHelper.getVectorDrawableAntTint(getContext(), R.drawable.wm_av_status_icon_busy, mStatusColorBusy);
     }
 
     private void initializeBitmap() {
-        mBitmap = getBitmapFromDrawable(getDrawable(), false);
+        mBitmap = getBitmapFromDrawable(getDrawable());
         setup();
     }
 
-    private Bitmap getBitmapFromDrawable(Drawable drawable, boolean isStatusIconDrawable) {
+    private Bitmap getBitmapFromDrawable(Drawable drawable) {
+
         if (drawable == null) {
             return null;
         }
@@ -391,10 +427,8 @@ public class WMAvatarView extends ImageView {
 
             if (drawable instanceof ColorDrawable) {
                 bitmap = Bitmap.createBitmap(COLOR_DRAWABLE_DIMENSION, COLOR_DRAWABLE_DIMENSION, BITMAP_CONFIG);
-            } else if (!isStatusIconDrawable){
-                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), BITMAP_CONFIG);
             } else {
-                bitmap = Bitmap.createBitmap(mStatusCircleRadius*2, mStatusCircleRadius*2, BITMAP_CONFIG);
+                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), BITMAP_CONFIG);
             }
 
             Canvas canvas = new Canvas(bitmap);

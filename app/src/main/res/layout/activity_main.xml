@@ -19,7 +19,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/default_avatar"
+            tools:src="@drawable/default_avatar"
             app:wm_av_status_busy_color="@color/busy"
             app:wm_av_status_as_color="false"
             app:wm_av_status_visible="true" />
@@ -122,8 +122,6 @@
 
     </LinearLayout>
 
-
-
     <corp.wmsoft.android.lib.wmavatarview.WMAvatarView
         android:id="@+id/toxAvatar"
         android:layout_width="196dp"
@@ -136,15 +134,15 @@
         app:wm_av_status_busy_color="@color/busy"
         app:wm_av_status_visible="true" />
 
-    <corp.wmsoft.android.lib.wmavatarview.WMAvatarView
-        android:id="@+id/toxAvatarMedium"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/default_avatar"
-        app:wm_av_status_visible="true" />
+    <!--<corp.wmsoft.android.lib.wmavatarview.WMAvatarView-->
+        <!--android:id="@+id/toxAvatarMedium"-->
+        <!--android:layout_width="56dp"-->
+        <!--android:layout_height="56dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:src="@drawable/default_avatar"-->
+        <!--app:wm_av_status_visible="true" />-->
 
 </RelativeLayout>
