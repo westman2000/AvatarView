@@ -29,14 +29,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final WMAvatarView toxAvatarView = (WMAvatarView) findViewById(R.id.toxAvatar);
-//        final WMAvatarView toolbarAvatar = (WMAvatarView) findViewById(R.id.toolbarAvatar);
+        final WMAvatarView toolbarAvatar = (WMAvatarView) findViewById(R.id.toolbarAvatar);
 //        final WMAvatarView toxAvatarMedium = (WMAvatarView) findViewById(R.id.toxAvatarMedium);
 
         findViewById(R.id.btnOffline).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 toxAvatarView.setStatus(IWMAvatarStatus.OFFLINE);
-//                toolbarAvatar.setStatus(IWMAvatarStatus.OFFLINE);
+                toolbarAvatar.setStatus(IWMAvatarStatus.OFFLINE);
 //                toxAvatarMedium.setStatus(IWMAvatarStatus.OFFLINE);
             }
         });
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 toxAvatarView.setStatus(IWMAvatarStatus.ONLINE);
-//                toolbarAvatar.setStatus(IWMAvatarStatus.ONLINE);
+                toolbarAvatar.setStatus(IWMAvatarStatus.ONLINE);
 //                toxAvatarMedium.setStatus(IWMAvatarStatus.ONLINE);
             }
         });
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 toxAvatarView.setStatus(IWMAvatarStatus.AWAY);
-//                toolbarAvatar.setStatus(IWMAvatarStatus.AWAY);
+                toolbarAvatar.setStatus(IWMAvatarStatus.AWAY);
 //                toxAvatarMedium.setStatus(IWMAvatarStatus.AWAY);
             }
         });
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 toxAvatarView.setStatus(IWMAvatarStatus.BUSY);
-//                toolbarAvatar.setStatus(IWMAvatarStatus.BUSY);
+                toolbarAvatar.setStatus(IWMAvatarStatus.BUSY);
 //                toxAvatarMedium.setStatus(IWMAvatarStatus.BUSY);
             }
         });
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 toxAvatarView.setText("");
-//                toolbarAvatar.setText("");
+                toolbarAvatar.setText("");
 //                toxAvatarMedium.setText("");
             }
         });
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 toxAvatarView.setText(null);
-//                toolbarAvatar.setText(null);
+                toolbarAvatar.setText(null);
 //                toxAvatarMedium.setText(null);
             }
         });
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 toxAvatarView.setText("WWW");
-//                toolbarAvatar.setText("WWW");
+                toolbarAvatar.setText("WWW");
 //                toxAvatarMedium.setText("WWW");
             }
         });
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 toxAvatarView.setText("a");
-//                toolbarAvatar.setText("a");
+                toolbarAvatar.setText("a");
 //                toxAvatarMedium.setText("a");
             }
         });
@@ -111,7 +111,11 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toxAvatarView.setImageDrawable(AndroidHelper.getVectorDrawable(MainActivity.this, R.drawable.ic_android_black_24dp));
+
+                Picasso.with(view.getContext()).load(R.drawable.ic_android_black_24dp).into(toxAvatarView);
+                Picasso.with(view.getContext()).load(R.drawable.ic_android_black_24dp).into(toolbarAvatar);
+
+//                toxAvatarView.setImageDrawable(AndroidHelper.getVectorDrawable(MainActivity.this, R.drawable.ic_android_black_24dp));
 //                Picasso.with(view.getContext()).load(R.drawable.default_avatar).into(toxAvatarMedium);
             }
         });
@@ -120,9 +124,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Log.d(TAG, "onClick("+toxAvatarView.getWidth()+", "+toxAvatarView.getHeight()+")");
-
-                toxAvatarView.setImageBitmap(AndroidHelper.decodeSampledBitmapFromFile(Environment.getExternalStorageDirectory() + File.separator + "1.jpg", toxAvatarView.getWidth(), toxAvatarView.getHeight()));
+//                toxAvatarView.setImageBitmap(AndroidHelper.decodeSampledBitmapFromFile(Environment.getExternalStorageDirectory() + File.separator + "1.jpg", toxAvatarView.getWidth(), toxAvatarView.getHeight()));
+                Picasso.with(view.getContext()).load(new File(Environment.getExternalStorageDirectory() + File.separator + "1.jpg")).resize(toxAvatarView.getWidth(), toxAvatarView.getHeight()).into(toxAvatarView);
+                Picasso.with(view.getContext()).load(new File(Environment.getExternalStorageDirectory() + File.separator + "1.jpg")).resize(toolbarAvatar.getWidth(), toolbarAvatar.getHeight()).into(toolbarAvatar);
 //                Picasso.with(view.getContext()).load(new File(Environment.getExternalStorageDirectory() + File.separator + "1.jpg")).into(toxAvatarView);
 //                Picasso.with(view.getContext()).load(new File(Environment.getExternalStorageDirectory() + File.separator + "2.jpg")).resize(512, 512).centerCrop().into(toxAvatarMedium);
 
@@ -133,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 toxAvatarView.setImageDrawable(null);
+                toolbarAvatar.setImageDrawable(null);
 //                toxAvatarMedium.setImageDrawable(null);
             }
         });
