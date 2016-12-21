@@ -21,8 +21,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.Keep;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -100,15 +102,18 @@ public class WMAvatarView extends ImageView {
     private int mStatus;
 
 
+    @Keep
     public WMAvatarView(Context context) {
         super(context);
         init();
     }
 
+    @Keep
     public WMAvatarView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
+    @Keep
     public WMAvatarView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
@@ -278,6 +283,7 @@ public class WMAvatarView extends ImageView {
         initializeBitmap();
     }
 
+    @Keep
     public void setText(String newText) {
         if (!TextUtils.isEmpty(newText)) {
             this.mText = newText.substring(0, 1).toUpperCase();
@@ -291,6 +297,7 @@ public class WMAvatarView extends ImageView {
         invalidate();
     }
 
+    @Keep
     public void setStatus(@IWMAvatarStatus int status) {
         this.mStatus = status;
 
@@ -330,8 +337,6 @@ public class WMAvatarView extends ImageView {
         mStatusMaxRadius = getResources().getInteger(R.integer.status_icon_max_radius);
         mStatusCircleRadius    = mStatusMaxRadius; // радиус внешнего круга
         mStatusIconRadius      = mStatusMaxRadius;
-
-
 
         mStatusIconPaint.setStrokeWidth(STATUS_ICON_STROKE_WIDTH);
         mStatusCirclePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));

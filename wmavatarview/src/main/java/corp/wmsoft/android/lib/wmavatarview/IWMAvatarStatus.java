@@ -1,6 +1,7 @@
 package corp.wmsoft.android.lib.wmavatarview;
 
 import android.support.annotation.IntDef;
+import android.support.annotation.Keep;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -9,6 +10,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Status constants
  */
+@Keep
 @Documented
 @IntDef({
         IWMAvatarStatus.OFFLINE,
