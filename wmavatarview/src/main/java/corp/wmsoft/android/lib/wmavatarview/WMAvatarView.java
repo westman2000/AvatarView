@@ -43,7 +43,6 @@ public class WMAvatarView extends ImageView {
     private static final Bitmap.Config BITMAP_CONFIG    = Bitmap.Config.ARGB_8888;
     private static final int COLOR_DRAWABLE_DIMENSION   = 2;
     private static final int STATUS_ICON_ANGLE          = 45;
-    private static final int STATUS_ICON_MAX_RADIUS     = 25;
     private static final int STATUS_ICON_MIN_MARGIN     = 3;
     private static final int STATUS_ICON_STROKE_WIDTH   = 2;
 
@@ -62,8 +61,9 @@ public class WMAvatarView extends ImageView {
     /**
      * ПЕременные кружка статуса
      */
-    private int          mStatusCircleRadius    = STATUS_ICON_MAX_RADIUS; // радиус внешнего круга
-    private int          mStatusIconRadius      = STATUS_ICON_MAX_RADIUS; // радиус кружка статуса
+    private int          mStatusMaxRadius;
+    private int          mStatusCircleRadius; // радиус внешнего круга
+    private int          mStatusIconRadius; // радиус кружка статуса
     private static final Paint  mStatusCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private boolean      isStatusVisible        = true;
     private boolean      useColorsAsStatusIcon  = true;
@@ -327,6 +327,12 @@ public class WMAvatarView extends ImageView {
     private void init() {
         super.setScaleType(SCALE_TYPE);
 
+        mStatusMaxRadius = getResources().getInteger(R.integer.status_icon_max_radius);
+        mStatusCircleRadius    = mStatusMaxRadius; // радиус внешнего круга
+        mStatusIconRadius      = mStatusMaxRadius;
+
+
+
         mStatusIconPaint.setStrokeWidth(STATUS_ICON_STROKE_WIDTH);
         mStatusCirclePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         //In versions > 3.0 need to define layer Type
@@ -362,7 +368,7 @@ public class WMAvatarView extends ImageView {
         statusIconY = (int) (mDrawableRadius * Math.sin(Math.toRadians(STATUS_ICON_ANGLE)) + mDrawableRect.centerY());
 
         mStatusCircleRadius = (int) (mDrawableRect.right - statusIconX);
-        mStatusCircleRadius = Math.min(mStatusCircleRadius, STATUS_ICON_MAX_RADIUS);
+        mStatusCircleRadius = Math.min(mStatusCircleRadius, mStatusMaxRadius);
         mStatusIconRadius = mStatusCircleRadius - Math.max(mStatusCircleRadius / 5, STATUS_ICON_MIN_MARGIN);
 
         // text paint settings

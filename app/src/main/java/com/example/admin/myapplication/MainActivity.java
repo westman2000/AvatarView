@@ -1,19 +1,14 @@
 package com.example.admin.myapplication;
 
-import android.app.Instrumentation;
-import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.IOException;
 
-import corp.wmsoft.android.lib.wmavatarview.AndroidHelper;
 import corp.wmsoft.android.lib.wmavatarview.IWMAvatarStatus;
 import corp.wmsoft.android.lib.wmavatarview.WMAvatarView;
 
@@ -112,8 +107,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Picasso.with(view.getContext()).load(R.drawable.ic_android_black_24dp).into(toxAvatarView);
-                Picasso.with(view.getContext()).load(R.drawable.ic_android_black_24dp).into(toolbarAvatar);
+                Picasso.with(view.getContext()).load(R.drawable.default_avatar).into(toxAvatarView);
+                Picasso.with(view.getContext()).load(R.drawable.default_avatar).into(toolbarAvatar);
 
 //                toxAvatarView.setImageDrawable(AndroidHelper.getVectorDrawable(MainActivity.this, R.drawable.ic_android_black_24dp));
 //                Picasso.with(view.getContext()).load(R.drawable.default_avatar).into(toxAvatarMedium);
