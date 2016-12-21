@@ -254,12 +254,6 @@ public class WMAvatarView extends ImageView {
     }
 
     @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        cleanResources();
-    }
-
-    @Override
     public void setImageBitmap(Bitmap bm) {
         super.setImageBitmap(bm);
         initializeBitmap();
@@ -354,6 +348,8 @@ public class WMAvatarView extends ImageView {
 
     private void setup() {
 
+        Log.d(TAG, "setup(" + getWidth() + ", " + getHeight() + ", " + mBitmap + ")");
+
         if (getWidth() == 0 && getHeight() == 0) {
             return;
         }
@@ -364,6 +360,8 @@ public class WMAvatarView extends ImageView {
             mBitmapPaint.setShader(mBitmapShader);
             mBitmapHeight = mBitmap.getHeight();
             mBitmapWidth = mBitmap.getWidth();
+
+            Log.d(TAG, "mBitmapHeight: "+mBitmapHeight+", mBitmapWidth: "+mBitmapWidth);
         }
 
         mDrawableRect.set(calculateBounds());
@@ -399,7 +397,6 @@ public class WMAvatarView extends ImageView {
     private Bitmap getBitmapFromDrawable(Drawable drawable) {
 
         if (drawable == null) {
-            cleanResources();
             return null;
         }
 
@@ -459,15 +456,10 @@ public class WMAvatarView extends ImageView {
         return new RectF(left, top, left + sideLength, top + sideLength);
     }
 
-    private void cleanResources() {
-        if (mBitmap != null)
-            mBitmap.recycle();
-        mBitmap = null;
 
-        mBitmapShader = null;
-    }
-
-
+    /**
+     *
+     */
     static class SavedState extends BaseSavedState {
 
         @IWMAvatarStatus
