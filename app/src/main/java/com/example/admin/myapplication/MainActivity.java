@@ -107,8 +107,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Picasso.with(view.getContext()).load(R.drawable.default_avatar).into(toxAvatarView);
-                Picasso.with(view.getContext()).load(R.drawable.default_avatar).into(toolbarAvatar);
+                Picasso picasso = Picasso.with(view.getContext());
+                picasso.setLoggingEnabled(true);
+
+                picasso.load(R.drawable.default_avatar).fit().into(toxAvatarView);
+                picasso.load(R.drawable.default_avatar).fit().into(toolbarAvatar);
 
 //                toxAvatarView.setImageDrawable(AndroidHelper.getVectorDrawable(MainActivity.this, R.drawable.ic_android_black_24dp));
 //                Picasso.with(view.getContext()).load(R.drawable.default_avatar).into(toxAvatarMedium);
@@ -120,8 +123,19 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
 //                toxAvatarView.setImageBitmap(AndroidHelper.decodeSampledBitmapFromFile(Environment.getExternalStorageDirectory() + File.separator + "1.jpg", toxAvatarView.getWidth(), toxAvatarView.getHeight()));
-                Picasso.with(view.getContext()).load(new File(Environment.getExternalStorageDirectory() + File.separator + "1.jpg")).resize(toxAvatarView.getWidth(), toxAvatarView.getHeight()).into(toxAvatarView);
-                Picasso.with(view.getContext()).load(new File(Environment.getExternalStorageDirectory() + File.separator + "1.jpg")).resize(toolbarAvatar.getWidth(), toolbarAvatar.getHeight()).into(toolbarAvatar);
+
+                Picasso picasso = Picasso.with(view.getContext());
+                picasso.setLoggingEnabled(true);
+
+                File file = new File(Environment.getExternalStorageDirectory() + File.separator + "1.jpg");
+
+                picasso.invalidate(file);
+
+                picasso
+                        .load(file)
+                        .resize(toxAvatarView.getWidth(), toxAvatarView.getHeight())
+                        .into(toxAvatarView);
+                picasso.load(file).resize(toolbarAvatar.getWidth(), toolbarAvatar.getHeight()).into(toolbarAvatar);
 //                Picasso.with(view.getContext()).load(new File(Environment.getExternalStorageDirectory() + File.separator + "1.jpg")).into(toxAvatarView);
 //                Picasso.with(view.getContext()).load(new File(Environment.getExternalStorageDirectory() + File.separator + "2.jpg")).resize(512, 512).centerCrop().into(toxAvatarMedium);
 
