@@ -1,6 +1,6 @@
 ext {
     compileSdkVer = 25
-    buildToolsVer = "25.0.1"
+    buildToolsVer = "25.0.2"
 
     minSdkVer    = 14
     targetSdkVer = 25
@@ -9,4 +9,8 @@ ext {
     verName = "0.0.1"
 
     supportLibVer    = "25.1.0"
+    picassoLibVer    = "2.5.2"
+
+    libraryName      = 'WMAvatarView'
+    libraryDesc      = 'Android circle image view with online status icon'
 }

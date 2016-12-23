@@ -28,4 +28,5 @@ android {
 dependencies {
     compile project(path: ':wmavatarview')
     compile "com.android.support:appcompat-v7:$supportLibVer"
+    compile "com.squareup.picasso:picasso:$picassoLibVer"
 }
