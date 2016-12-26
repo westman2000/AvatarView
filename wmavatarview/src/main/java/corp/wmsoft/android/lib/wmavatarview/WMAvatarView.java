@@ -25,8 +25,11 @@ import android.support.annotation.Keep;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 
 
 /**
@@ -136,6 +139,29 @@ public class WMAvatarView extends ImageView {
         }
 
         init();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        int action = event.getAction();
+
+        if (action == MotionEvent.ACTION_UP) {
+            float x = event.getX();
+            float y = event.getY();
+
+            boolean isTouchStatus = Math.pow(x - statusIconX, 2) + Math.pow(y - statusIconY, 2) < Math.pow(mStatusCircleRadius*2, 2);
+
+            if (isTouchStatus) {
+                Log.d(TAG, "onTouchEvent("+x+"("+statusIconX+"), "+y+"("+statusIconY+"), "+action+")");
+
+                showPopup();
+
+                return true;
+            }
+        }
+
+        return super.onTouchEvent(event);
     }
 
     @Override
@@ -456,6 +482,17 @@ public class WMAvatarView extends ImageView {
         return new RectF(left, top, left + sideLength, top + sideLength);
     }
 
+    public void showPopup() {
+        PopupMenu popup = new PopupMenu(getContext(), this);
+        popup.inflate(R.menu.wm_av_status_popup);
+
+        popup.getMenu().findItem(R.id.wmMenuItemOnline).setIcon(mStatusDrawableOnline);
+        popup.getMenu().findItem(R.id.wmMenuItemOffline).setIcon(mStatusDrawableOffline);
+        popup.getMenu().findItem(R.id.wmMenuItemAway).setIcon(mStatusDrawableAway);
+        popup.getMenu().findItem(R.id.wmMenuItemBusy).setIcon(mStatusDrawableBusy);
+
+        popup.show();
+    }
 
     /**
      *

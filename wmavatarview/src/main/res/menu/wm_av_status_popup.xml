@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="Online"
+        android:id="@+id/wmMenuItemOnline"
+        />
+
+    <item
+        android:title="Offline"
+        android:id="@+id/wmMenuItemOffline"
+        />
+
+    <item
+        android:title="Away"
+        android:id="@+id/wmMenuItemAway"
+        />
+
+    <item
+        android:title="Busy"
+        android:id="@+id/wmMenuItemBusy"
+        />
+
+</menu>

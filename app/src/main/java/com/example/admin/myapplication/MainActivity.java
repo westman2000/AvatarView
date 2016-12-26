@@ -3,6 +3,7 @@ package com.example.admin.myapplication;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.squareup.picasso.Picasso;
@@ -26,6 +27,13 @@ public class MainActivity extends AppCompatActivity {
         final WMAvatarView toxAvatarView = (WMAvatarView) findViewById(R.id.toxAvatar);
         final WMAvatarView toolbarAvatar = (WMAvatarView) findViewById(R.id.toolbarAvatar);
 //        final WMAvatarView toxAvatarMedium = (WMAvatarView) findViewById(R.id.toxAvatarMedium);
+
+        toxAvatarView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "toxAvatarView - onClick: ");
+            }
+        });
 
         findViewById(R.id.btnOffline).setOnClickListener(new View.OnClickListener() {
             @Override
