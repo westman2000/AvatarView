@@ -11,6 +11,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 
 import corp.wmsoft.android.lib.wmavatarview.IWMAvatarStatus;
+import corp.wmsoft.android.lib.wmavatarview.IWMAvatarStatusChangedListener;
 import corp.wmsoft.android.lib.wmavatarview.WMAvatarView;
 
 
@@ -26,12 +27,19 @@ public class MainActivity extends AppCompatActivity {
 
         final WMAvatarView toxAvatarView = (WMAvatarView) findViewById(R.id.toxAvatar);
         final WMAvatarView toolbarAvatar = (WMAvatarView) findViewById(R.id.toolbarAvatar);
-//        final WMAvatarView toxAvatarMedium = (WMAvatarView) findViewById(R.id.toxAvatarMedium);
+
+        toxAvatarView.setStatusChangedListener(new IWMAvatarStatusChangedListener() {
+            @Override
+            public void onWMAvatarStatusChanged(@IWMAvatarStatus int newStatus) {
+                Log.d(TAG, "onWMAvatarStatusChanged  <-- (" + newStatus + ") -->");
+                toxAvatarView.setStatus(newStatus);
+            }
+        });
 
         toxAvatarView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "toxAvatarView - onClick: ");
+                Log.d(TAG, "toxAvatarView ==== onClick ====");
             }
         });
 
@@ -40,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 toxAvatarView.setStatus(IWMAvatarStatus.OFFLINE);
                 toolbarAvatar.setStatus(IWMAvatarStatus.OFFLINE);
-//                toxAvatarMedium.setStatus(IWMAvatarStatus.OFFLINE);
             }
         });
 
@@ -49,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 toxAvatarView.setStatus(IWMAvatarStatus.ONLINE);
                 toolbarAvatar.setStatus(IWMAvatarStatus.ONLINE);
-//                toxAvatarMedium.setStatus(IWMAvatarStatus.ONLINE);
             }
         });
 
@@ -58,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 toxAvatarView.setStatus(IWMAvatarStatus.AWAY);
                 toolbarAvatar.setStatus(IWMAvatarStatus.AWAY);
-//                toxAvatarMedium.setStatus(IWMAvatarStatus.AWAY);
             }
         });
 
@@ -67,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 toxAvatarView.setStatus(IWMAvatarStatus.BUSY);
                 toolbarAvatar.setStatus(IWMAvatarStatus.BUSY);
-//                toxAvatarMedium.setStatus(IWMAvatarStatus.BUSY);
             }
         });
 
@@ -79,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 toxAvatarView.setText("");
                 toolbarAvatar.setText("");
-//                toxAvatarMedium.setText("");
             }
         });
         findViewById(R.id.btnSetNull).setOnClickListener(new View.OnClickListener() {
@@ -87,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 toxAvatarView.setText(null);
                 toolbarAvatar.setText(null);
-//                toxAvatarMedium.setText(null);
             }
         });
         findViewById(R.id.btnWWW).setOnClickListener(new View.OnClickListener() {
@@ -95,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 toxAvatarView.setText("WWW");
                 toolbarAvatar.setText("WWW");
-//                toxAvatarMedium.setText("WWW");
             }
         });
         findViewById(R.id.btnA).setOnClickListener(new View.OnClickListener() {
@@ -103,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 toxAvatarView.setText("a");
                 toolbarAvatar.setText("a");
-//                toxAvatarMedium.setText("a");
             }
         });
 
@@ -120,18 +120,12 @@ public class MainActivity extends AppCompatActivity {
 
                 picasso.load(R.drawable.default_avatar).fit().into(toxAvatarView);
                 picasso.load(R.drawable.default_avatar).fit().into(toolbarAvatar);
-
-//                toxAvatarView.setImageDrawable(AndroidHelper.getVectorDrawable(MainActivity.this, R.drawable.ic_android_black_24dp));
-//                Picasso.with(view.getContext()).load(R.drawable.default_avatar).into(toxAvatarMedium);
             }
         });
 
         findViewById(R.id.btnSetExtImg).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//                toxAvatarView.setImageBitmap(AndroidHelper.decodeSampledBitmapFromFile(Environment.getExternalStorageDirectory() + File.separator + "1.jpg", toxAvatarView.getWidth(), toxAvatarView.getHeight()));
-
                 Picasso picasso = Picasso.with(view.getContext());
                 picasso.setLoggingEnabled(true);
 
@@ -144,9 +138,6 @@ public class MainActivity extends AppCompatActivity {
                         .resize(toxAvatarView.getWidth(), toxAvatarView.getHeight())
                         .into(toxAvatarView);
                 picasso.load(file).resize(toolbarAvatar.getWidth(), toolbarAvatar.getHeight()).into(toolbarAvatar);
-//                Picasso.with(view.getContext()).load(new File(Environment.getExternalStorageDirectory() + File.separator + "1.jpg")).into(toxAvatarView);
-//                Picasso.with(view.getContext()).load(new File(Environment.getExternalStorageDirectory() + File.separator + "2.jpg")).resize(512, 512).centerCrop().into(toxAvatarMedium);
-
             }
         });
 
@@ -155,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 toxAvatarView.setImageDrawable(null);
                 toolbarAvatar.setImageDrawable(null);
-//                toxAvatarMedium.setImageDrawable(null);
             }
         });
 

@@ -2,23 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="Online"
-        android:id="@+id/wmMenuItemOnline"
+        android:title="@string/wm_av_online"
+        android:id="@+id/wmAvMenuItemOnline"
         />
 
     <item
-        android:title="Offline"
-        android:id="@+id/wmMenuItemOffline"
+        android:title="@string/wm_av_offline"
+        android:id="@+id/wmAvMenuItemOffline"
         />
 
     <item
-        android:title="Away"
-        android:id="@+id/wmMenuItemAway"
+        android:title="@string/wm_av_away"
+        android:id="@+id/wmAvMenuItemAway"
         />
 
     <item
-        android:title="Busy"
-        android:id="@+id/wmMenuItemBusy"
+        android:title="@string/wm_av_busy"
+        android:id="@+id/wmAvMenuItemBusy"
         />
 
 </menu>

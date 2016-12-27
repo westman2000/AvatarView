@@ -25,7 +25,9 @@ import android.support.annotation.Keep;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -104,6 +106,14 @@ public class WMAvatarView extends ImageView {
     @IWMAvatarStatus
     private int mStatus;
 
+    /**
+     * Меню выбора статуса (away/busy/...)
+     */
+    private boolean isPopupMenuVisible;
+    private boolean isPopupMenuOfflineItemVisible;
+    private IWMAvatarStatusChangedListener statusChangedListener;
+    private PopupMenu popup;
+
 
     @Keep
     public WMAvatarView(Context context) {
@@ -122,12 +132,14 @@ public class WMAvatarView extends ImageView {
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.WMAvatarView, defStyleAttr, 0);
 
-        isStatusVisible = a.getBoolean(R.styleable.WMAvatarView_wm_av_status_visible, true);
-        useColorsAsStatusIcon = a.getBoolean(R.styleable.WMAvatarView_wm_av_status_as_color, true);
-        mStatusColorOffline = a.getColor(R.styleable.WMAvatarView_wm_av_status_offline_color, Color.GREEN);
-        mStatusColorOnline = a.getColor(R.styleable.WMAvatarView_wm_av_status_online_color, Color.GREEN);
-        mStatusColorAway = a.getColor(R.styleable.WMAvatarView_wm_av_status_away_color, Color.YELLOW);
-        mStatusColorBusy = a.getColor(R.styleable.WMAvatarView_wm_av_status_busy_color, Color.RED);
+        isStatusVisible                 = a.getBoolean(R.styleable.WMAvatarView_wm_av_status_visible,               true);
+        useColorsAsStatusIcon           = a.getBoolean(R.styleable.WMAvatarView_wm_av_status_as_color,              true);
+        mStatusColorOffline             = a.getColor(R.styleable.WMAvatarView_wm_av_status_offline_color,           Color.GREEN);
+        mStatusColorOnline              = a.getColor(R.styleable.WMAvatarView_wm_av_status_online_color,            Color.GREEN);
+        mStatusColorAway                = a.getColor(R.styleable.WMAvatarView_wm_av_status_away_color,              Color.YELLOW);
+        mStatusColorBusy                = a.getColor(R.styleable.WMAvatarView_wm_av_status_busy_color,              Color.RED);
+        isPopupMenuVisible              = a.getBoolean(R.styleable.WMAvatarView_wm_av_is_popup_menu_visible,        true);
+        isPopupMenuOfflineItemVisible   = a.getBoolean(R.styleable.WMAvatarView_wm_av_is_offline_menu_item_visible, false);
 
         a.recycle();
 
@@ -144,20 +156,16 @@ public class WMAvatarView extends ImageView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        int action = event.getAction();
-
-        if (action == MotionEvent.ACTION_UP) {
-            float x = event.getX();
-            float y = event.getY();
-
-            boolean isTouchStatus = Math.pow(x - statusIconX, 2) + Math.pow(y - statusIconY, 2) < Math.pow(mStatusCircleRadius*2, 2);
-
-            if (isTouchStatus) {
-                Log.d(TAG, "onTouchEvent("+x+"("+statusIconX+"), "+y+"("+statusIconY+"), "+action+")");
-
-                showPopup();
-
-                return true;
+        if (isStatusVisible && isPopupMenuVisible) {
+            int action = event.getAction();
+            if (action == MotionEvent.ACTION_UP) {
+                float x = event.getX();
+                float y = event.getY();
+                boolean isTouchStatus = Math.pow(x - statusIconX, 2) + Math.pow(y - statusIconY, 2) < Math.pow(mStatusCircleRadius*2, 2);
+                if (isTouchStatus) {
+                    showPopup();
+                    return true;
+                }
             }
         }
 
@@ -280,6 +288,15 @@ public class WMAvatarView extends ImageView {
     }
 
     @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        statusChangedListener = null;
+
+        if (popup != null)
+            popup.dismiss();
+    }
+
+    @Override
     public void setImageBitmap(Bitmap bm) {
         super.setImageBitmap(bm);
         initializeBitmap();
@@ -349,6 +366,15 @@ public class WMAvatarView extends ImageView {
         mStatusIconPaint.setStyle(style);
 
         invalidate();
+    }
+
+    public void setStatusChangedListener(IWMAvatarStatusChangedListener statusChangedListener) {
+
+        // no listener set if menu not visible
+        if (!isPopupMenuVisible)
+            return;
+
+        this.statusChangedListener = statusChangedListener;
     }
 
     private void init() {
@@ -483,13 +509,40 @@ public class WMAvatarView extends ImageView {
     }
 
     public void showPopup() {
-        PopupMenu popup = new PopupMenu(getContext(), this);
+        popup = new PopupMenu(getContext(), this);
         popup.inflate(R.menu.wm_av_status_popup);
 
-        popup.getMenu().findItem(R.id.wmMenuItemOnline).setIcon(mStatusDrawableOnline);
-        popup.getMenu().findItem(R.id.wmMenuItemOffline).setIcon(mStatusDrawableOffline);
-        popup.getMenu().findItem(R.id.wmMenuItemAway).setIcon(mStatusDrawableAway);
-        popup.getMenu().findItem(R.id.wmMenuItemBusy).setIcon(mStatusDrawableBusy);
+        popup.getMenu().findItem(R.id.wmAvMenuItemOffline).setVisible(isPopupMenuOfflineItemVisible);
+
+        popup.getMenu().findItem(R.id.wmAvMenuItemOnline).setIcon(mStatusDrawableOnline);
+        popup.getMenu().findItem(R.id.wmAvMenuItemOffline).setIcon(mStatusDrawableOffline);
+        popup.getMenu().findItem(R.id.wmAvMenuItemAway).setIcon(mStatusDrawableAway);
+        popup.getMenu().findItem(R.id.wmAvMenuItemBusy).setIcon(mStatusDrawableBusy);
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+
+                if (statusChangedListener != null) {
+                    if (id == R.id.wmAvMenuItemOnline) {
+                        statusChangedListener.onWMAvatarStatusChanged(IWMAvatarStatus.ONLINE);
+                        return true;
+                    } else if (id == R.id.wmAvMenuItemOffline) {
+                        statusChangedListener.onWMAvatarStatusChanged(IWMAvatarStatus.OFFLINE);
+                        return true;
+                    } else if (id == R.id.wmAvMenuItemAway) {
+                        statusChangedListener.onWMAvatarStatusChanged(IWMAvatarStatus.AWAY);
+                        return true;
+                    } else if (id == R.id.wmAvMenuItemBusy) {
+                        statusChangedListener.onWMAvatarStatusChanged(IWMAvatarStatus.BUSY);
+                        return true;
+                    } else
+                        return false;
+                } else
+                    return false;
+            }
+        });
 
         popup.show();
     }

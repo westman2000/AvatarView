@@ -5,8 +5,8 @@ ext {
     minSdkVer    = 14
     targetSdkVer = 25
 
-    verCode = 1
-    verName = "0.0.1"
+    verCode = 2
+    verName = "0.0.2"
 
     supportLibVer    = "25.1.0"
     picassoLibVer    = "2.5.2"

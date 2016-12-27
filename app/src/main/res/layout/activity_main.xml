@@ -132,7 +132,9 @@
         app:wm_av_status_online_color="@color/online"
         app:wm_av_status_away_color="@color/away"
         app:wm_av_status_busy_color="@color/busy"
-        app:wm_av_status_visible="true" />
+        app:wm_av_status_visible="true"
+        app:wm_av_is_popup_menu_visible="true"
+        />
 
     <!--<corp.wmsoft.android.lib.wmavatarview.WMAvatarView-->
         <!--android:id="@+id/toxAvatarMedium"-->
