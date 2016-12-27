@@ -46,3 +46,7 @@ dependencies {
     compile "com.android.support:support-compat:$supportLibVer"
     compile "com.android.support:support-vector-drawable:$supportLibVer"
 }
+
+// https://github.com/ShamylZakariya/FlyoutMenus - клевый пример открытия диалога и меню
+
+// https://github.com/tomergoldst/tooltips - класный пример бабла для сообщения и анимация появления бабла
